@@ -11,6 +11,15 @@ class Database
         $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
     }
 
+    public function close_connect()
+    {
+        if($this->db_handler)
+        {
+            mysqli_close($this->db_handler);
+        }
+
+    }
+
     public function singup($user_name,$password,$confirm_password,$fname,$image,$cv,$job)
     {
         $error_array = [];
@@ -69,10 +78,13 @@ class Database
                 $cv_directory = "Uploads/CVs/";
                 $cv_target_file = $cv_directory.$user_name.'.pdf';
 
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+
                 move_uploaded_file($image_temp,$Image_target_file);
                 move_uploaded_file($cv_temp,$cv_target_file);
 
-                $sql = "INSERT INTO $this->table_name  VALUES (NULL, '$user_name' , '$password' , '$fname','$job','$user_name.jpg' , '$user_name.pdf', TRUE , FALSE )";
+                $sql = "INSERT INTO $this->table_name  VALUES (NULL, '$user_name' , '$hashed_password' , '$fname','$job','$user_name.jpg' , '$user_name.pdf', TRUE , FALSE )";
                 $result = $this->db_handler->query($sql);
 
                 if($result)
@@ -98,26 +110,44 @@ class Database
     {
         $login_error_array = [];
 
-        $sql = "SELECT * FROM $this->table_name WHERE user_name = '$user_name' AND password = '$password'";
+//        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "SELECT * FROM $this->table_name WHERE user_name = '$user_name'";
         $result = $this->db_handler->query($sql);
 
         if (mysqli_num_rows($result) >0)
         {
             $data = mysqli_fetch_array($result);
 
-            $_SESSION["user_id"] = $data['user_name'];
+            $hashed_password = $data['password'];
 
-            $_SESSION["is_admin"] = ($data['isadmin'] == 1 ? true : false);
 
-            $_SESSION["fname"] = $data['Fname'];
-            $_SESSION["job"] = $data['job'];
+            if(password_verify($password, $hashed_password))
+            {
+
+//                $data = mysqli_fetch_array($result);
+
+                $_SESSION["user_id"] = $data['user_name'];
+
+                $_SESSION["is_admin"] = ($data['isadmin'] == 1 ? true : false);
+
+                $_SESSION["fname"] = $data['Fname'];
+                $_SESSION["job"] = $data['job'];
 
 //            var_dump($data['user_name']);
 //            die();
 
-            $this->set_online($data['user_name']);
-            $dir = $_SERVER['PHP_SELF'];
-            header("$dir");
+                $this->set_online($data['user_name']);
+                $dir = $_SERVER['PHP_SELF'];
+                header("$dir");
+            }
+            else
+                {
+                    array_push($login_error_array,"User Name Or password is Wrong !");
+                }
+
+
+
         }
         else
             {
@@ -167,6 +197,74 @@ class Database
         }
 
     }
+
+
+    public function change_password($old_password,$new_password,$confirm_password)
+    {
+        $password_error_array = [];
+        $change_pass = true;
+
+        if(isset($_SESSION["user_id"]))
+        {
+            $user = $_SESSION["user_id"];
+            $sql = "SELECT * FROM $this->table_name WHERE user_name = '$user'";
+            $result = $this->db_handler->query($sql);
+
+            if (mysqli_num_rows($result) >0)
+            {
+                $data = mysqli_fetch_array($result);
+
+                $saved_password = $data['password'];
+
+
+                if(!password_verify($old_password, $saved_password))
+                {
+
+                    array_push($password_error_array,"Your Old Password Doesn't Match !");
+                    $change_pass = false;
+                }
+
+                if($new_password != $confirm_password)
+                {
+                    array_push($password_error_array,"Your Password & Confirm Doesn't Match !");
+                    $change_pass = false;
+                }
+
+                if(empty($new_password) || empty($confirm_password) || empty($old_password))
+                {
+                    array_push($password_error_array,"Enter All Fields !");
+                    $change_pass = false;
+                }
+
+                if($change_pass)
+                    {
+                        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+
+                        $sql = "UPDATE $this->table_name SET password = '$hashed_password' WHERE user_name = '$user'";
+                        $result = $this->db_handler->query($sql);
+
+                        if($result)
+                        {
+                            $this->signout();
+                        }
+
+                    }
+
+            }
+            else
+            {
+                array_push($password_error_array,"Some Thing Went Wrong Try again !");
+            }
+
+        }
+
+
+        return $password_error_array;
+
+
+    }
+
 
 
 }

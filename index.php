@@ -26,6 +26,7 @@ $db = new Database();
 
 $signup_status = [];
 $login_status = [];
+$change_password_status = [];
 // sign up
 if (isset($_POST["signup_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
@@ -40,6 +41,7 @@ if (isset($_POST["signup_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 
     $db->connect();
     $signup_status = $db->singup($user_name,$password,$confirm_password,$fname,$image_file,$cv_file,$job);
+    $db->close_connect();
 
 }
 
@@ -51,12 +53,27 @@ if (isset($_POST["log_in_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 
     $db->connect();
     $login_status = $db->login($user_name,$password);
+    $db->close_connect();
 }
 
 if (isset($_POST["sign_out_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
     $db->connect();
     $db->signout();
+    $db->close_connect();
+}
+
+if (isset($_POST["change_pass"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
+{
+    $old_password = $_POST["old_password"];
+    $new_password = $_POST["new_password"];
+    $confirm_password = $_POST["confirm_password"];
+
+
+    $db->connect();
+    $change_password_status = $db->change_password($old_password,$new_password,$confirm_password);
+    $db->close_connect();
+//    $db->signout();
 }
 //var_dump($signup_status);
 
@@ -66,13 +83,27 @@ if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === true) {
     //admin views should be required here
     require_once ("Views/admin/users.php");
 } elseif (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === false) {
-    require_once ("Views/member/view_my_profile.php");
+    if(isset($_GET["page"]) && $_GET["page"] =="edit_user")
+    {
+        require_once ("Views/member/edit_my_profile.php");
+    }
+    else if(isset($_GET["page"]) && $_GET["page"] =="change_pass")
+    {
+        require_once ("Views/member/change_pass_profile.php");
+    }
+    else
+        {
+            require_once ("Views/member/view_my_profile.php");
+        }
+
+
     //members views should be required here
 } else {
     if(isset($_GET["page"]) && $_GET["page"] =="signup" || count($signup_status)>0 )
     {
         require_once ("Views/public/signup.php");
     }
+
 
     else
         {
@@ -92,3 +123,5 @@ if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === true) {
 <script src="./Resources/js/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script src="./Resources/js/bootstrap.min.js" type="text/javascript"></script>
+
+<script src="./Resources/js/app.js" type="text/javascript"></script>

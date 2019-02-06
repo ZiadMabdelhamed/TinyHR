@@ -4,23 +4,18 @@
     <meta charset="UTF-8">
     <title>AdminLTE | Dashboard</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <!-- bootstrap 3.0.2 -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <!-- font Awesome -->
-    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <!-- Ionicons -->
-    <link href="css/ionicons.min.css" rel="stylesheet" type="text/css" />
-    <!-- Theme style -->
-    <link href="css/AdminLTE.css" rel="stylesheet" type="text/css" />
 
-    <link href="css/custom.css" rel="stylesheet" type="text/css" />
+    <!-- Ionicons -->
+    <link href="./Resources/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="./Resources/css/custom.css" rel="stylesheet" type="text/css" />
 
 
 </head>
 <body class="skin-black">
 <!-- header logo: style can be found in header.less -->
 <header class="header">
-    <a href="index.html" class="logo">
+    <a href="<?php $_SERVER['PHP_SELF'] ?>" class="logo">
         <!-- Add the class icon to your logo image or logo icon to add the margining -->
         AdminLTE
     </a>
@@ -41,24 +36,26 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-user"></i>
-                        <span>Jane Doe <i class="caret"></i></span>
+                        <span><?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?> <i class="caret"></i></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header bg-light-blue">
-                            <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                            <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                             <p>
-                                Jane Doe - Web Developer
-                                <small>Member since Nov. 2012</small>
+                                <?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>
                             </p>
                         </li>
+
                         <!-- Menu Body -->
 
                         <!-- Menu Footer-->
                         <li class="user-footer">
 
                             <div class="pull-right">
-                                <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                <form  method="POST">
+                                    <button name="sign_out_form" type="submit" class="btn bg-olive btn-block">Sign out</button>
+                                </form>
                             </div>
                         </li>
                     </ul>
@@ -75,25 +72,32 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                    <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p>Hello, Jane</p>
+                    <p><?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?></p>
 
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
+
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li>
-                    <a href="index.html">
-                        <i class="fa fa-dashboard"></i> <span>Profile</span>
-                    </a>
+                        <?php echo "<a href=". $_SERVER['PHP_SELF']."> <i class='fa fa-dashboard'></i> <span>Profile</span></a>" ?>
                 </li>
-                <li class="active">
-                    <a href="pages/widgets.html">
-                        <i class="fa fa-users"></i> <span>Edit Profile</span>
+
+                <li class="treeview active ">
+                    <a href="#">
+                        <i class='fa fa-users'></i>
+                            <span>Edit Profile</span>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
+                    <ul class="treeview-menu">
+                        <?php echo "<li class='active'><a href=". $_SERVER['PHP_SELF']."?page=edit_user"."><i class='fa fa-angle-double-right'></i> General</a><li>" ?>
+                        <?php echo "<li><a href=". $_SERVER['PHP_SELF']."?page=change_pass"."><i class='fa fa-angle-double-right'></i> Change Password</a><li>" ?>
+
+                    </ul>
                 </li>
 
             </ul>
@@ -133,7 +137,7 @@
                         <i class="fa fa-coffee"></i>
                         This is an <strong>.alert</strong>. Use this to show important messages to the user.
                     </div>
-                    <h3>Personal info</h3>
+                    <h3> General info</h3>
 
                     <form class="form-horizontal" role="form">
 
@@ -149,20 +153,6 @@
                             <label class="col-lg-3 control-label">Job:</label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" value="">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">Password:</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="password" value="11111122333">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">Confirm password:</label>
-                            <div class="col-md-8">
-                                <input class="form-control" type="password" value="11111122333">
                             </div>
                         </div>
 
@@ -201,13 +191,6 @@
 </div><!-- ./wrapper -->
 
 <!-- add new calendar event modal -->
-
-
-<!-- jQuery 2.0.2 -->
-<script src="js/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="js/bootstrap.min.js" type="text/javascript"></script>
-
 
 
 
