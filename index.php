@@ -21,60 +21,47 @@ if(!isset($_SESSION))
 
 session_regenerate_id();
 
-$user = new Users();
+$user = new User();
+$user->Start_db();
+
 $db = new Database();
 
 $signup_status = [];
 $login_status = [];
 $change_password_status = [];
+$update_data_status = [];
 // sign up
 if (isset($_POST["signup_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
 //    var_dump($_POST);
-    $fname = $_POST["fname"];
-    $user_name = $_POST["user_name"];
-    $password = $_POST["password"];
-    $confirm_password = $_POST["confirm_password"];
-    $job = $_POST["job"];
-    $image_file = $_FILES["image_file"];
-    $cv_file = $_FILES["cv_file"];
-
-    $db->connect();
-    $signup_status = $db->singup($user_name,$password,$confirm_password,$fname,$image_file,$cv_file,$job);
-    $db->close_connect();
-
+    $signup_status = $user->sign_up();
 }
 
 if (isset($_POST["log_in_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
 
-    $user_name = $_POST["user_name"];
-    $password = $_POST["password"];
+    $login_status = $user->login();
 
-    $db->connect();
-    $login_status = $db->login($user_name,$password);
-    $db->close_connect();
 }
 
 if (isset($_POST["sign_out_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
-    $db->connect();
-    $db->signout();
-    $db->close_connect();
+    $user->signout();
+
 }
 
 if (isset($_POST["change_pass"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
-    $old_password = $_POST["old_password"];
-    $new_password = $_POST["new_password"];
-    $confirm_password = $_POST["confirm_password"];
-
-
-    $db->connect();
-    $change_password_status = $db->change_password($old_password,$new_password,$confirm_password);
-    $db->close_connect();
-//    $db->signout();
+    $change_password_status = $user->change_password();
 }
+
+
+if (isset($_POST["Update_data"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
+{
+    $update_data_status = $user->update_user_data();
+
+}
+
 //var_dump($signup_status);
 
 //********************************************//

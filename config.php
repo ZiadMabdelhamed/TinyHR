@@ -5,3 +5,5 @@ define("__PASS__","");
 define("__DB__","tiny_hr");
 define("__RECORDS_PER_PAGE__",5);
 define("__Debug__Mode__",0);
+define("__Images__Folder__","Uploads/Images/");
+define("__CVs__Folder__","Uploads/CVs/");

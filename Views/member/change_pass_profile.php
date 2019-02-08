@@ -42,7 +42,7 @@
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header bg-light-blue">
-                            <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
+                            <img src="./<?php if(isset($_SESSION["user_id"])) echo __Images__Folder__.$_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                             <p>
                                 <?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>
                             </p>
@@ -73,7 +73,7 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
+                    <img src="./<?php if(isset($_SESSION["user_id"])) echo __Images__Folder__.$_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
                     <p><?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?></p>

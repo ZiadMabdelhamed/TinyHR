@@ -41,7 +41,7 @@
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header bg-light-blue">
-                            <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
+                            <img src="./<?php if(isset($_SESSION["user_id"])) echo __Images__Folder__.$_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                             <p>
                                 <?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>
                             </p>
@@ -72,7 +72,7 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
+                    <img src="./<?php if(isset($_SESSION["user_id"])) echo __Images__Folder__.$_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
                     <p><?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?></p>
@@ -138,13 +138,29 @@
                         This is an <strong>.alert</strong>. Use this to show important messages to the user.
                     </div>
                     <h3> General info</h3>
+                    <?php
+                        if(isset($_SESSION["user_id"]))
+                        {
+                            $result =  $user->get_user_data($_SESSION["user_id"]);
+                            $user_data = mysqli_fetch_array($result);
 
-                    <form class="form-horizontal" role="form">
+                        }
+
+                    ?>
+                    <form class="form-horizontal" role="form" action="<?php echo $_SERVER['PHP_SELF']."?page=edit_user"; ?>" method="POST" enctype="multipart/form-data" >
+
+
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">User name:</label>
+                            <div class="col-lg-8">
+                                <input name="user_name" class="form-control" type="text" value="<?php if (isset($user_data)) { echo $user_data['user_name']; }  ?>">
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Full name:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" type="text" value="Bishop">
+                                <input name="fname" class="form-control" type="text" value="<?php if (isset($user_data)) { echo $user_data['Fname']; }  ?>">
                             </div>
                         </div>
 
@@ -152,30 +168,31 @@
                         <div class="form-group">
                             <label class="col-lg-3 control-label">Job:</label>
                             <div class="col-lg-8">
-                                <input class="form-control" type="text" value="">
+                                <input name="job" class="form-control" type="text" value="<?php if (isset($user_data)) { echo $user_data['job']; }  ?>">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">Upload CV:</label>
                             <div class="col-md-8">
-                                <input type="file" class="text-center center-block well well-sm">
+                                <input name="cv_file" type="file" class="text-center center-block well well-sm"  style="display: inline;" accept=".pdf">
+                                <a href="./<?php if (isset($user_data)) { echo __CVs__Folder__.$user_data['cv']; }  ?>" target="_blank" style=" margin-left: 15%;">Open CV</a>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-3 control-label">Upload Image:</label>
+                            <label class="col-md-3 control-label" style=" margin-top: 3%;">Upload Image:</label>
                             <div class="col-md-8">
-                                <input type="file" class="text-center center-block well well-sm">
+                                <input name="image_file" type="file" class="text-center center-block well well-sm" style="display: inline;" accept=".png ,.jpg">
+                                <img src="./<?php if (isset($user_data)) { echo __Images__Folder__.$user_data['Image']; }  ?>" class="img-circle" alt="User Image" style="width: 100px;height: 100px;border: 3px solid #3c8dbc!important; margin-left: 15%;">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label"></label>
                             <div class="col-md-8">
-                                <input type="button" class="btn btn-primary" value="Save Changes">
-                                <span></span>
-                                <input type="reset" class="btn btn-default" value="Cancel">
+                                <input name="Update_data" type="submit" class="btn btn-primary" value="Save Changes">
+
                             </div>
                         </div>
 

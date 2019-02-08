@@ -72,10 +72,12 @@ class Database
 
         if($sign_name)
             {
-                $Image_directory = "Uploads/Images/";
+                //$Image_directory = "Uploads/Images/";
+                $Image_directory = __Images__Folder__;
                 $Image_target_file = $Image_directory.$user_name.'.jpg';
 
-                $cv_directory = "Uploads/CVs/";
+                //$cv_directory = "Uploads/CVs/";
+                $cv_directory = __CVs__Folder__;
                 $cv_target_file = $cv_directory.$user_name.'.pdf';
 
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -262,6 +264,19 @@ class Database
 
         return $password_error_array;
 
+
+    }
+
+
+    public function get_user($user_name)
+    {
+        $sql = "SELECT * FROM $this->table_name WHERE user_name = '$user_name'";
+        $result = $this->db_handler->query($sql);
+
+        if(!empty($result) && $result)
+        {
+            return $result;
+        }
 
     }
 
