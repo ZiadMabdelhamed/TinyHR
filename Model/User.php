@@ -81,13 +81,16 @@ class User
         $user_name = $_POST["user_name"];
         $fname = $_POST["fname"];
         $job = $_POST["job"];
-        $job = $_POST["job"];
+
 
         $image_file = $_FILES["image_file"];
         $cv_file = $_FILES["cv_file"];
 
+        $this->db->connect();
+        $update_data_status = $this->db->update_data($user_name,$fname,$job,$image_file,$cv_file);
+        $this->db->close_connect();
 
-
+        return $update_data_status;
     }
 
 }

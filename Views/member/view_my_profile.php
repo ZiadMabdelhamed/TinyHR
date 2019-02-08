@@ -145,7 +145,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="bio-image">
-                                            <img src="./<?php if(isset($_SESSION["user_id"])) echo __Images__Folder__.$_SESSION["user_id"]?>.jpg" />
+                                            <img src="./<?php if(isset($_SESSION["user_id"])) echo __Images__Folder__.$_SESSION["user_id"]?>.jpg" Style="width: 254px;height: 240px;"/>
                                         </div>
                                     </div>
                                 </div>

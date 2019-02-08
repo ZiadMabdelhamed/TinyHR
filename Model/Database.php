@@ -20,6 +20,32 @@ class Database
 
     }
 
+
+    public function user_name_exist($user_name,$id = NULL)
+    {
+        if($id != NULL)
+        {
+            $result = $this->db_handler->query("SELECT * FROM $this->table_name WHERE user_name = '$user_name' AND id <> '$id'");
+
+        }
+        else
+            {
+                $result = $this->db_handler->query("SELECT * FROM $this->table_name WHERE user_name = '$user_name'");
+            }
+        //$result = $this->db_handler->query("SELECT * FROM ".$this->table_name);
+
+        if (mysqli_num_rows($result) >0) {
+            array_push($error_array, "User Name Already Taken");
+            //$sign_name = false;
+            return true;
+        }
+        else
+            {
+                return false;
+            }
+    }
+
+
     public function singup($user_name,$password,$confirm_password,$fname,$image,$cv,$job)
     {
         $error_array = [];
@@ -44,11 +70,15 @@ class Database
 
             $result = $this->db_handler->query("SELECT * FROM $this->table_name WHERE user_name = '$user_name'");
             //$result = $this->db_handler->query("SELECT * FROM ".$this->table_name);
-
-            if (mysqli_num_rows($result) >0) {
+            if($this->user_name_exist($user_name))
+            {
                 array_push($error_array, "User Name Already Taken");
                 $sign_name = false;
             }
+//            if (mysqli_num_rows($result) >0) {
+//                array_push($error_array, "User Name Already Taken");
+//                $sign_name = false;
+//            }
         }
 
 
@@ -129,6 +159,7 @@ class Database
 
 //                $data = mysqli_fetch_array($result);
 
+                $_SESSION["id"] = $data['id'];
                 $_SESSION["user_id"] = $data['user_name'];
 
                 $_SESSION["is_admin"] = ($data['isadmin'] == 1 ? true : false);
@@ -277,6 +308,87 @@ class Database
         {
             return $result;
         }
+
+    }
+
+
+    public function update_data($user_name,$fname,$job,$image_file,$cv_file)
+    {
+        $update = true;
+        $error_array = [];
+
+        if(isset($_SESSION["id"]))
+        {
+            if($this->user_name_exist($user_name,$_SESSION["id"]))
+            {
+                array_push($error_array, "User Name Already Taken !");
+                $update = false;
+            }
+        }
+
+
+        if(empty($user_name))
+        {
+            array_push($error_array, "Enter User Name !");
+            $update = false;
+        }
+
+        if(empty($fname))
+        {
+            array_push($error_array, "Enter Valide  Full Name !");
+            $update = false;
+        }
+
+        if(empty($job))
+        {
+            array_push($error_array, "Enter Job !");
+            $update = false;
+        }
+
+
+
+        if($update)
+            {
+                if(!empty($image_file['name']))
+                {
+                    $image_temp = $image_file['tmp_name'];
+
+                    $Image_directory = __Images__Folder__;
+                    $Image_target_file = $Image_directory.$user_name.'.jpg';
+                    move_uploaded_file($image_temp,$Image_target_file);
+
+
+                }
+                if(!empty($cv_file['name']))
+                {
+                    $cv_temp = $cv_file['tmp_name'];
+
+                    $cv_directory = __CVs__Folder__;
+                    $cv_target_file = $cv_directory.$user_name.'.pdf';
+                    move_uploaded_file($cv_temp,$cv_target_file);
+                }
+
+                $old_user_name =  $_SESSION["user_id"];
+
+                $sql = "UPDATE $this->table_name SET user_name = '$user_name' , Fname = '$fname' ,job = '$job' WHERE user_name = '$old_user_name'";
+                $result = $this->db_handler->query($sql);
+
+                if($result)
+                {
+                    $_SESSION["user_id"] = $user_name;
+                    $_SESSION["is_admin"] = false;
+                    $_SESSION["fname"] = $fname;
+                    $_SESSION["job"] = $job;
+
+
+                    $dir = $_SERVER['PHP_SELF'];
+                    header("$dir");
+
+                }
+
+            }
+
+        return $error_array;
 
     }
 

@@ -123,7 +123,22 @@
         <section class="content">
 
             <!-- Small boxes (Stat box) -->
+            <?php
+            // show errors
+            if(isset($update_data_status) && count($update_data_status) > 0)
+            {
+                for($i=0 ;$i<count($update_data_status);$i++)
+                {
+                    echo '<div class="alert alert-danger">
+                <strong>Error! </strong>'.$update_data_status[$i].
+                        '</div>';
+                }
 
+            }
+
+
+
+            ?>
 
 
             <div class="row">
@@ -132,11 +147,11 @@
 
                 <!-- edit form column -->
                 <div class="col-md-9 personal-info">
-                    <div class="alert alert-info alert-dismissable">
-                        <a class="panel-close close" data-dismiss="alert">×</a>
-                        <i class="fa fa-coffee"></i>
-                        This is an <strong>.alert</strong>. Use this to show important messages to the user.
-                    </div>
+<!--                    <div class="alert alert-info alert-dismissable">-->
+<!--                        <a class="panel-close close" data-dismiss="alert">×</a>-->
+<!--                        <i class="fa fa-coffee"></i>-->
+<!--                        This is an <strong>.alert</strong>. Use this to show important messages to the user.-->
+<!--                    </div>-->
                     <h3> General info</h3>
                     <?php
                         if(isset($_SESSION["user_id"]))
