@@ -13,6 +13,7 @@
  * and open the template in the editor.
  */
 require_once("autoload.php");
+require_once ("config.php");
 define("_ALLOW_ACCESS", 1);
 if(!isset($_SESSION))
 {
@@ -25,6 +26,9 @@ $user = new User();
 $user->Start_db();
 
 $db = new Database();
+
+$fields=array();
+ $formArrays = $db->get_data($fields);
 
 $signup_status = [];
 $login_status = [];
@@ -99,8 +103,20 @@ if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === true) {
 
 
 }
-//********************************************//
 
+//********************************************//
+if(isset($_GET["id"]) && is_numeric($_GET["id"])){
+    require_once ("Views/admin/user.php");
+}
+elseif (isset($_GET["Next"]) && is_numeric($_GET["Next"])){
+    require_once ("Views/admin/users.php");
+}
+elseif (isset($_GET["Previous"]) && is_numeric($_GET["Previous"])){
+    require_once ("Views/admin/users.php");
+}
+//else {
+//    require_once ("Views/admin/users.php");
+//}
 
 
 ?>

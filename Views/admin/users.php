@@ -11,6 +11,38 @@
 
 </head>
 <body class="skin-black">
+    <?php 
+    $db = new Database("items");
+    $index=0;
+    
+    
+if (isset($_GET["Next"])){
+    if($_GET["Next"] == 0){
+        $index = 5;
+        $fields = $db->get_data(5, $index);
+    }else if ($_GET["Next"]>=$db->countUsers()){
+    $index=0;
+    $fields=$db->get_data(0,$index);    
+    }
+    else{
+        $index = $_GET["Next"] + 5;
+        $fields = $db->get_data(5, $index);
+    }
+}
+else if (isset($_GET["Previous"])){
+    if(($_GET["Previous"]-5) < 0){
+        $index = 0;
+        $fields = $db->get_data(5, $index);
+    }else{
+        $index = $_GET["Previous"] - 5;
+        $fields = $db->get_data(5, $index);
+    }
+}
+else{
+    $fields = $db->get_data();
+}
+
+    ?>
 <!-- header logo: style can be found in header.less -->
 <header class="header">
     <a href="index.html" class="logo">
@@ -34,15 +66,14 @@
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="glyphicon glyphicon-user"></i>
-                        <span>Jane Doe <i class="caret"></i></span>
+                        <span><?php echo $_SESSION["user_id"]; ?> <i class="caret"></i></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header bg-light-blue">
                             <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
-                            <p>
-                                Jane Doe - Web Developer
-                                <small>Member since Nov. 2012</small>
+                            <p>                                
+                                <?php echo $_SESSION["user_id"]; ?>
                             </p>
                         </li>
                         <!-- Menu Body -->
@@ -74,7 +105,9 @@
                     <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p>Hello, Jane</p>
+                    <p>><?php 
+                    echo $_SESSION["user_id"];
+                    ?></p>
 
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -124,18 +157,16 @@
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>
-                                65
+                                <?php
+                               echo $db->countUsers(); ?>
                             </h3>
                             <p>
-                                Unique Visitors
+                                 Our Users
                             </p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a href="#" class="small-box-footer">
-                            More info <i class="fa fa-arrow-circle-right"></i>
-                        </a>
+                        </div><!--                      
                     </div>
                 </div><!-- ./col -->
             </div><!-- /.row -->
@@ -153,69 +184,34 @@
 
 
 
-                <div class="box" style="width: 90%;margin: 0 auto;">
+                <div class="box" style="width: 300%; margin: 0 auto;">
                     <div class="box-header">
                         <h3 class="box-title">Bordered Table</h3>
                     </div><!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tbody><tr>
-                                <th style="width: 10px">#</th>
-                                <th>Task</th>
-                                <th>Progress</th>
-                                <th style="width: 40px">Label</th>
+                                <th style="width: 10px">ID</th>
+                                <th>User Name</th>                                
+                                <th style="width: 40px">Option</th>
                             </tr>
-                            <tr>
-                                <td>1.</td>
-                                <td>Update software</td>
-                                <td>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-red">55%</span></td>
-                            </tr>
-                            <tr>
-                                <td>2.</td>
-                                <td>Clean database</td>
-                                <td>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-yellow">70%</span></td>
-                            </tr>
-                            <tr>
-                                <td>3.</td>
-                                <td>Cron job running</td>
-                                <td>
-                                    <div class="progress xs progress-striped active">
-                                        <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-light-blue">30%</span></td>
-                            </tr>
-                            <tr>
-                                <td>4.</td>
-                                <td>Fix and squish bugs</td>
-                                <td>
-                                    <div class="progress xs progress-striped active">
-                                        <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                                    </div>
-                                </td>
-                                <td><span class="badge bg-green">90%</span></td>
-                            </tr>
+                            <?php 
+                                foreach ($fields as $value){
+                                    echo "<tr><td>" .$value[0] . "</td>";    
+                                    echo "<td>" .$value[1] . "</td>";    
+                                    echo "<td><a href=" . $_SERVER['PHP_SELF']."?id=" .$value['id']. ">More Info</a></td>";                                    
+                                }
+                                echo "<tr>";
+                            ?>
                             </tbody></table>
                     </div><!-- /.box-body -->
-                    <div class="box-footer clearfix">
+                    
+                   <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
-                            <li><a href="#">«</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">»</a></li>
+                       <?php   echo " <li><a href=" . $_SERVER['PHP_SELF']."?Previous=".$index.">Previous</a></li>";
+                            echo "<li><a href=" . $_SERVER['PHP_SELF']."?Next=".$index.">Next</a></li>"; ?>
                         </ul>
-                    </div>
+                    </div> 
                 </div><!-- /.box -->
 
 

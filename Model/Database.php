@@ -440,7 +440,42 @@ class Database
         return $error_array;
 
     }
+    
+    public function get_data($fields = array(), $start = 0) {
+         $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
+         $sql = "Select * From $this->table_name LIMIT $start ,5";
+        $dataFromDB = MYSQLI_QUERY($this->db_handler, $sql);
+        $arr_result = array();
+        while($row = MYSQLI_FETCH_ARRAY($dataFromDB)){
+            $arr_result[] = ARRAY_CHANGE_KEY_CASE($row);
+        }
+        return $arr_result;
+    
+    }
+ public function get_record_by_id($id,$primary_key){
+         $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
+        $sql = "Select *  From $this->table_name WHERE $primary_key = $id";
+        $dataFromDB = MYSQLI_QUERY($this->db_handler, $sql);
+        $arr_result = array();
+        while($row = MYSQLI_FETCH_ARRAY($dataFromDB)){
+            $arr_result[] = ARRAY_CHANGE_KEY_CASE($row);
+        }
+        return $arr_result;
+    }
 
-
-
+    public function countUsers() {
+        $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
+        
+        $sql="SELECT *  FROM $this->table_name";
+        $dataFromDB=  MYSQLI_QUERY($this->db_handler,$sql); 
+        $rowcount=mysqli_num_rows($dataFromDB);
+         mysqli_free_result($dataFromDB);
+         return $rowcount;
+  }
+//        while($row = mysqli_fetch_array($dataFromDB,MYSQLI_NUM)){
+//            $arr_result[] = ARRAY_CHANGE_KEY_CASE($row);
+//            
+//        }
+//        return $arr_result;                     
+//    }   
 }
