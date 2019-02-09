@@ -12,6 +12,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+require_once("vendor/autoload.php");
 require_once("autoload.php");
 require_once ("config.php");
 define("_ALLOW_ACCESS", 1);
@@ -26,6 +27,8 @@ $user = new User();
 $user->Start_db();
 
 $db = new Database();
+
+$captcha = new \Anhskohbo\NoCaptcha\NoCaptcha(__Secret_Key__, __Site_Key__);
 
 $fields=array();
  $formArrays = $db->get_data($fields);
@@ -44,7 +47,7 @@ if (isset($_POST["signup_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 if (isset($_POST["log_in_form"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 {
 
-    $login_status = $user->login();
+    $login_status = $user->login($captcha);
 
 }
 
@@ -73,7 +76,8 @@ if (isset($_POST["Update_data"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === true) {
     //admin views should be required here
     require_once ("Views/admin/users.php");
-} elseif (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === false) {
+}
+elseif (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === false) {
     if(isset($_GET["page"]) && $_GET["page"] =="edit_user")
     {
         require_once ("Views/member/edit_my_profile.php");

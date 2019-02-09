@@ -8,7 +8,7 @@
 </head>
 <body class="bg-black">
 <?php
-
+//$captcha = new NoCaptcha
 // show errors
 if(isset($signup_status) && count($signup_status) > 0)
 {
@@ -21,6 +21,9 @@ if(isset($signup_status) && count($signup_status) > 0)
 
 }
 
+
+
+
 ?>
 
     <div class="form-box" id="login-box">
@@ -28,10 +31,10 @@ if(isset($signup_status) && count($signup_status) > 0)
     <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data" >
         <div class="body bg-gray">
             <div class="form-group">
-                <input type="text" name="fname" class="form-control" placeholder="Full name"/>
+                <input type="text" name="fname" class="form-control" placeholder="Full name" value="<?php if(isset($_POST["fname"])) echo $_POST["fname"] ?>"/>
             </div>
             <div class="form-group">
-                <input type="text" name="user_name" class="form-control" placeholder="User ID"/>
+                <input type="text" name="user_name" class="form-control" placeholder="User ID" value="<?php if(isset($_POST["user_name"])) echo $_POST["user_name"] ?>"/>
             </div>
             <div class="form-group">
                 <input type="password" name="password" class="form-control" placeholder="Password"/>
@@ -40,7 +43,7 @@ if(isset($signup_status) && count($signup_status) > 0)
                 <input type="password" name="confirm_password" class="form-control" placeholder="Retype password"/>
             </div>
             <div class="form-group">
-                <input type="text" name="job" class="form-control" placeholder="Job"/>
+                <input type="text" name="job" class="form-control" placeholder="Job" value="<?php if(isset($_POST["job"]))echo $_POST["job"] ?>"/>
             </div>
 
             <div class="form-group">

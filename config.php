@@ -8,3 +8,5 @@ define("__Debug__Mode__",0);
 define("__Images__Folder__","Uploads/Images/");
 define("__CVs__Folder__","Uploads/CVs/");
 define("__Home_Page__","/TinyHR//index.php");
+define("__Secret_Key__","6LfyU5AUAAAAAJE-smrkp7gX2-L2WZESddv9uBfr");
+define("__Site_Key__","6LfyU5AUAAAAALowtS56lnOFSVXGKpPcyu4naxF5");

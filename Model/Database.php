@@ -185,7 +185,7 @@ class Database
      return $error_array;
     }
 
-    public function login($user_name,$password)
+    public function login($user_name,$password,$captcha)
     {
         $login_error_array = [];
 
@@ -203,23 +203,30 @@ class Database
 
             if(password_verify($password, $hashed_password))
             {
+                if($captcha->verifyResponse($_POST['g-recaptcha-response']))
+                {
 
-//                $data = mysqli_fetch_array($result);
+                    $_SESSION["id"] = $data['id'];
+                    $_SESSION["user_id"] = $data['user_name'];
 
-                $_SESSION["id"] = $data['id'];
-                $_SESSION["user_id"] = $data['user_name'];
+                    $_SESSION["is_admin"] = ($data['isadmin'] == 1 ? true : false);
 
-                $_SESSION["is_admin"] = ($data['isadmin'] == 1 ? true : false);
-
-                $_SESSION["fname"] = $data['Fname'];
-                $_SESSION["job"] = $data['job'];
+                    $_SESSION["fname"] = $data['Fname'];
+                    $_SESSION["job"] = $data['job'];
 
 //            var_dump($data['user_name']);
 //            die();
 
-                $this->set_online($data['user_name']);
-                $dir = $_SERVER['PHP_SELF'];
-                header("$dir");
+                    $this->set_online($data['user_name']);
+                    $dir = $_SERVER['PHP_SELF'];
+                    header("$dir");
+                }
+                else
+                {
+                    array_push($login_error_array,"Incorrect captcha !");
+                }
+//                $data = mysqli_fetch_array($result);
+
             }
             else
                 {
@@ -443,7 +450,7 @@ class Database
     
     public function get_data($fields = array(), $start = 0) {
          $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
-         $sql = "Select * From $this->table_name LIMIT $start ,5";
+         $sql = "Select * From $this->table_name WHERE isadmin = 0 LIMIT $start ,5";
         $dataFromDB = MYSQLI_QUERY($this->db_handler, $sql);
         $arr_result = array();
         while($row = MYSQLI_FETCH_ARRAY($dataFromDB)){
@@ -463,10 +470,11 @@ class Database
         return $arr_result;
     }
 
+
     public function countUsers() {
         $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
         
-        $sql="SELECT *  FROM $this->table_name";
+        $sql="SELECT *  FROM $this->table_name WHERE isadmin = 0";
         $dataFromDB=  MYSQLI_QUERY($this->db_handler,$sql); 
         $rowcount=mysqli_num_rows($dataFromDB);
          mysqli_free_result($dataFromDB);

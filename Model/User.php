@@ -40,13 +40,14 @@ class User
         return $signup_status;
     }
 
-    public function login()
+    public function login($captcha)
     {
         $user_name = $_POST["user_name"];
         $password = $_POST["password"];
 
+
         $this->db->connect();
-        $login_status = $this->db->login($user_name,$password);
+        $login_status = $this->db->login($user_name,$password,$captcha);
         $this->db->close_connect();
 
         return $login_status;

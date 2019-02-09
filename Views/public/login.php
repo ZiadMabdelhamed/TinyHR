@@ -37,6 +37,9 @@ if(isset($login_status) && count($login_status) > 0)
 <!--            <div class="form-group">-->
 <!--                <input type="checkbox" name="remember_me"/> Remember me-->
 <!--            </div>-->
+            <div class="form-group">
+                <?php echo $captcha->display(); ?>
+            </div>
         </div>
         <div class="footer">
             <button name="log_in_form" type="submit" class="btn bg-olive btn-block">Sign me in</button>
@@ -47,6 +50,7 @@ if(isset($login_status) && count($login_status) > 0)
             <?php echo "<a href=". $_SERVER['PHP_SELF']."?page=signup".">Register a new membership</a>" ?>
         </div>
     </form>
+    <?php echo $captcha->renderJs(); ?>
 
 </div>
 

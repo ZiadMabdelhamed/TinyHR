@@ -11,18 +11,18 @@
 
 </head>
 <body class="skin-black">
-    <?php 
-    $db = new Database("items");
+    <?php
+
     $index=0;
-    
-    
+
+
 if (isset($_GET["Next"])){
     if($_GET["Next"] == 0){
         $index = 5;
         $fields = $db->get_data(5, $index);
     }else if ($_GET["Next"]>=$db->countUsers()){
     $index=0;
-    $fields=$db->get_data(0,$index);    
+    $fields=$db->get_data(0,$index);
     }
     else{
         $index = $_GET["Next"] + 5;
@@ -105,7 +105,7 @@ else{
                     <img src="./Uploads/Images/<?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?>.jpg" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p>><?php 
+                    <p><?php
                     echo $_SESSION["user_id"];
                     ?></p>
 
