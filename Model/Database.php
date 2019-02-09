@@ -56,6 +56,8 @@ class Database
         $cv_temp = $cv['tmp_name'];
 
         $sign_name = true;
+        $user_name = trim($user_name);
+        $fname = trim($fname);
 
 
         if($password != $confirm_password)
@@ -64,22 +66,67 @@ class Database
             $sign_name = false;
         }
 
+        if($password == $confirm_password && !empty($password) && !empty($confirm_password))
+        {
+            if(strlen($password) < 8 || strlen($password) > 16)
+            {
+                array_push($error_array,"Password must be between  8 & 16 characters ! ");
+                $sign_name = false;
+            }
+        }
 
         if(!empty($user_name))
         {
 
             $result = $this->db_handler->query("SELECT * FROM $this->table_name WHERE user_name = '$user_name'");
-            //$result = $this->db_handler->query("SELECT * FROM ".$this->table_name);
             if($this->user_name_exist($user_name))
             {
                 array_push($error_array, "User Name Already Taken");
                 $sign_name = false;
             }
-//            if (mysqli_num_rows($result) >0) {
-//                array_push($error_array, "User Name Already Taken");
-//                $sign_name = false;
-//            }
+
         }
+
+        if(empty($job))
+        {
+            array_push($error_array,"Enter Your Job ! ");
+            $sign_name = false;
+        }
+
+        if(empty($image['name']))
+        {
+            array_push($error_array,"Choose Your Image ! ");
+            $sign_name = false;
+        }
+        else
+            {
+
+                $allowed =  array('png' ,'jpg');
+                $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
+
+                if( !in_array($ext,$allowed))
+                {
+                    array_push($error_array,"enter .png or .jpg Image ");
+                    $sign_name = false;
+                }
+            }
+
+        if(empty($cv['name']))
+        {
+            array_push($error_array,"Choose Your CV ! ");
+            $sign_name = false;
+        }
+        else
+            {
+                $ext = pathinfo($cv['name'], PATHINFO_EXTENSION);
+                if( $ext !== 'pdf')
+                {
+                    array_push($error_array,"enter .pdf file ");
+                    $sign_name = false;
+                }
+
+            }
+
 
 
         if(empty($user_name))
@@ -381,8 +428,10 @@ class Database
                     $_SESSION["job"] = $job;
 
 
-                    $dir = $_SERVER['PHP_SELF'];
-                    header("$dir");
+                    $dir = __Home_Page__;
+                    header("Location:".__Home_Page__);
+
+//                    header("$dir");
 
                 }
 
