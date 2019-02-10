@@ -30,8 +30,6 @@ $db = new Database();
 
 $captcha = new \Anhskohbo\NoCaptcha\NoCaptcha(__Secret_Key__, __Site_Key__);
 
-$fields=array();
- $formArrays = $db->get_data($fields);
 
 $signup_status = [];
 $login_status = [];
@@ -75,7 +73,40 @@ if (isset($_POST["Update_data"])  && $_SERVER['REQUEST_METHOD'] == 'POST')
 //Routing
 if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === true) {
     //admin views should be required here
-    require_once ("Views/admin/users.php");
+    if(isset($_GET["page"]) && $_GET["page"] =="user")
+    {
+        require_once ("Views/admin/user.php");
+
+        if(isset($_GET["id"]) && is_numeric($_GET["id"])){
+            require_once ("Views/admin/user.php");
+        }
+        elseif (isset($_GET["Next"]) && is_numeric($_GET["Next"])){
+            require_once ("Views/admin/users.php");
+        }
+        elseif (isset($_GET["Previous"]) && is_numeric($_GET["Previous"])){
+            require_once ("Views/admin/users.php");
+        }
+    }
+    else if(isset($_GET["page"]) && $_GET["page"] =="online_users")
+    {
+        require_once ("Views/admin/online_users.php");
+
+        if(isset($_GET["id"]) && is_numeric($_GET["id"])){
+            require_once ("Views/admin/online_users.php");
+        }
+        elseif (isset($_GET["Next"]) && is_numeric($_GET["Next"])){
+            require_once ("Views/admin/online_users.php");
+        }
+        elseif (isset($_GET["Previous"]) && is_numeric($_GET["Previous"])){
+            require_once ("Views/admin/online_users.php");
+        }
+    }
+
+    else
+        {
+            require_once ("Views/admin/users.php");
+        }
+
 }
 elseif (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === false) {
     if(isset($_GET["page"]) && $_GET["page"] =="edit_user")
@@ -107,20 +138,6 @@ elseif (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === false) {
 
 
 }
-
-//********************************************//
-if(isset($_GET["id"]) && is_numeric($_GET["id"])){
-    require_once ("Views/admin/user.php");
-}
-elseif (isset($_GET["Next"]) && is_numeric($_GET["Next"])){
-    require_once ("Views/admin/users.php");
-}
-elseif (isset($_GET["Previous"]) && is_numeric($_GET["Previous"])){
-    require_once ("Views/admin/users.php");
-}
-//else {
-//    require_once ("Views/admin/users.php");
-//}
 
 
 ?>

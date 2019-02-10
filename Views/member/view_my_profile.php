@@ -107,17 +107,6 @@
 
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Dashboard
-                <small>Control panel</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li class="active">Dashboard</li>
-            </ol>
-        </section>
 
         <!-- Main content -->
         <section class="content">
@@ -155,7 +144,7 @@
                                     <h1><?php if(isset($_SESSION["user_id"])) echo $_SESSION["user_id"]?></h1>
                                     <h4>User Name : <?php if(isset($_SESSION["fname"])) echo $_SESSION["fname"]?></h4>
                                     <br>
-                                    <h3>Job : web developer</h3>
+                                    <h3>Job : <?php if(isset($_SESSION["job"])) echo $_SESSION["job"]?></h3>
 
                                 </div>
                             </div>

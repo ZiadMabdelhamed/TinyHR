@@ -447,43 +447,75 @@ class Database
         return $error_array;
 
     }
-    
-    public function get_data($fields = array(), $start = 0) {
-         $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
-         $sql = "Select * From $this->table_name WHERE isadmin = 0 LIMIT $start ,5";
+
+
+    public function get_user_data($fields = array(), $start = 0) {
+
+        $this->connect();
+        $sql = "Select * From $this->table_name WHERE isadmin = 0 LIMIT $start ,5";
         $dataFromDB = MYSQLI_QUERY($this->db_handler, $sql);
+
+        $this->close_connect();
         $arr_result = array();
         while($row = MYSQLI_FETCH_ARRAY($dataFromDB)){
             $arr_result[] = ARRAY_CHANGE_KEY_CASE($row);
         }
+
         return $arr_result;
     
     }
- public function get_record_by_id($id,$primary_key){
-         $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
-        $sql = "Select *  From $this->table_name WHERE $primary_key = $id";
+
+    public function get_Onlineusers_data($fields = array(), $start = 0) {
+
+        $this->connect();
+        $sql = "Select * From $this->table_name WHERE isadmin = 0 AND isactive = 1  LIMIT $start ,5";
         $dataFromDB = MYSQLI_QUERY($this->db_handler, $sql);
+
+        $this->close_connect();
         $arr_result = array();
         while($row = MYSQLI_FETCH_ARRAY($dataFromDB)){
             $arr_result[] = ARRAY_CHANGE_KEY_CASE($row);
         }
+
         return $arr_result;
+
     }
 
+     public function get_record_by_id($id,$primary_key){
 
-    public function countUsers() {
-        $this->db_handler = new mysqli(__HOST__, __USER__, __PASS__, __DB__);
-        
-        $sql="SELECT *  FROM $this->table_name WHERE isadmin = 0";
-        $dataFromDB=  MYSQLI_QUERY($this->db_handler,$sql); 
-        $rowcount=mysqli_num_rows($dataFromDB);
-         mysqli_free_result($dataFromDB);
-         return $rowcount;
-  }
-//        while($row = mysqli_fetch_array($dataFromDB,MYSQLI_NUM)){
-//            $arr_result[] = ARRAY_CHANGE_KEY_CASE($row);
-//            
-//        }
-//        return $arr_result;                     
-//    }   
+            $this->connect();
+            $sql = "Select *  From $this->table_name WHERE $primary_key = $id";
+            $dataFromDB = MYSQLI_QUERY($this->db_handler, $sql);
+
+            $this->close_connect();
+            $arr_result = MYSQLI_FETCH_ARRAY($dataFromDB);
+
+
+            return $arr_result;
+        }
+
+
+        public function countUsers($online = null) {
+
+            $this->connect();
+            if($online != null)
+            {
+                $sql="SELECT *  FROM $this->table_name WHERE isadmin = 0 AND isactive = 1 ";
+            }
+            else
+                {
+                    $sql="SELECT *  FROM $this->table_name WHERE isadmin = 0";
+                }
+
+            $dataFromDB=  MYSQLI_QUERY($this->db_handler,$sql);
+            $this->close_connect();
+
+            $rowcount=mysqli_num_rows($dataFromDB);
+            mysqli_free_result($dataFromDB);
+
+             return $rowcount;
+          }
+
+
+
 }

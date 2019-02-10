@@ -19,27 +19,27 @@
 if (isset($_GET["Next"])){
     if($_GET["Next"] == 0){
         $index = 5;
-        $fields = $db->get_user_data(5, $index);
-    }else if ($_GET["Next"]>=$db->countUsers()){
+        $fields = $db->get_Onlineusers_data(5, $index);
+    }else if ($_GET["Next"]>=$db->countUsers(1)){
     $index=0;
-    $fields=$db->get_user_data(0,$index);
+    $fields=$db->get_Onlineusers_data(0,$index);
     }
     else{
         $index = $_GET["Next"] + 5;
-        $fields = $db->get_user_data(5, $index);
+        $fields = $db->get_Onlineusers_data(5, $index);
     }
 }
 else if (isset($_GET["Previous"])){
     if(($_GET["Previous"]-5) < 0){
         $index = 0;
-        $fields = $db->get_user_data(5, $index);
+        $fields = $db->get_Onlineusers_data(5, $index);
     }else{
         $index = $_GET["Previous"] - 5;
-        $fields = $db->get_user_data(5, $index);
+        $fields = $db->get_Onlineusers_data(5, $index);
     }
 }
 else{
-    $fields = $db->get_user_data();
+    $fields = $db->get_Onlineusers_data();
 }
 
     ?>
@@ -114,12 +114,12 @@ else{
             </div>
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <li class="active">
+                <li>
                     <a href="<?php echo __Home_Page__ ?>">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="<?php echo __Home_Page__ ."?page=online_users" ?>">
                         <i class="fa fa-users"></i> <span>Online Users</span>
                     </a>
@@ -132,7 +132,6 @@ else{
 
     <!-- Right side column. Contains the navbar and content of the page -->
     <aside class="right-side">
-
 
         <!-- Main content -->
         <section class="content">
@@ -148,10 +147,10 @@ else{
                         <div class="inner">
                             <h3>
                                 <?php
-                               echo $db->countUsers(); ?>
+                               echo $db->countUsers(1); ?>
                             </h3>
                             <p>
-                                  Users
+                                 Online Users
                             </p>
                         </div>
                         <div class="icon">
@@ -204,8 +203,8 @@ else{
                     
                    <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
-                       <?php   echo " <li><a href=" . $_SERVER['PHP_SELF']."?Previous=".$index.">Previous</a></li>";
-                            echo "<li><a href=" . $_SERVER['PHP_SELF']."?Next=".$index.">Next</a></li>"; ?>
+                       <?php   echo " <li><a href=" . $_SERVER['PHP_SELF']."?page=online_users"."&Previous=".$index.">Previous</a></li>";
+                            echo "<li><a href=" . $_SERVER['PHP_SELF']."?page=online_users"."&Next=".$index.">Next</a></li>"; ?>
                         </ul>
                     </div> 
                 </div><!-- /.box -->
