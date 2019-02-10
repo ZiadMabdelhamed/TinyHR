@@ -9,6 +9,19 @@
     <link href="./Resources/css/ionicons.min.css" rel="stylesheet" type="text/css" />
 
 
+    <style>
+        .button1 {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 136px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="skin-black">
     <?php
@@ -172,11 +185,12 @@ else{
             <!-- Main row -->
             <div class="row">
 
-
-
                 <div class="box" style="width: 300%; margin: 0 auto;">
                     <div class="box-header">
-                        <h3 class="box-title">Bordered Table</h3>
+                        <h3 class="box-title">Users Table</h3>
+
+                        <button class="button1"><a href="<?php echo __Home_Page__."?page=excel_file"?>" target="_blank"> export exel file </a></button>
+
                     </div><!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">

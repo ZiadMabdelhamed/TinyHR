@@ -518,4 +518,46 @@ class Database
 
 
 
+        public function exel()
+        {
+            $this->connect();
+
+            $sql = "SELECT * FROM $this->table_name";
+            $query = $this->db_handler->query($sql);
+
+
+
+            $delimiter = ",";
+            $filename = "Users_data_" . date('Ymd') . ".csv"; // Create file name
+
+            //create a file pointer
+            $f = fopen('php://memory', 'w');
+
+            //set column headers
+            $fields = array('id', 'user_name', 'Fname', 'job');
+            fputcsv($f, $fields, $delimiter);
+
+            //output each row of the data, format line as csv and write to file pointer
+            while($row = MYSQLI_FETCH_ARRAY($query)){
+
+                $lineData = array($row['id'], $row['user_name'], $row['Fname'], $row['job']);
+                fputcsv($f, $lineData, $delimiter);
+            }
+
+            //move back to beginning of file
+            fseek($f, 0);
+
+            //set headers to download file rather than displayed
+            header('Content-Type: text/csv');
+            header('Content-Disposition: attachment; filename="' . $filename . '";');
+
+            //output all remaining data on a file pointer
+            fpassthru($f);
+
+            $this->close_connect();
+
+        }
+
+
+
 }

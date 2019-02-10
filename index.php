@@ -1,12 +1,18 @@
 
-<link href="./Resources/css/bootstrap.css" rel="stylesheet" type="text/css" />
-<!-- font Awesome -->
-<link href="./Resources/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-<!-- Theme style -->
-<link href="./Resources/css/AdminLTE.css" rel="stylesheet" type="text/css" />
 
 <?php
+if(isset($_GET["page"]) && $_GET["page"] =="excel_file") {
 
+}
+else
+    {
+        echo '
+        <link href = "./Resources/css/bootstrap.css" rel = "stylesheet" type = "text/css" />
+        <!--font Awesome-->
+        <link href = "./Resources/css/font-awesome.min.css" rel = "stylesheet" type = "text/css" />
+        <!--Theme style-->
+        <link href = "./Resources/css/AdminLTE.css" rel = "stylesheet" type = "text/css" />';
+    }
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -87,6 +93,7 @@ if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === true) {
             require_once ("Views/admin/users.php");
         }
     }
+
     else if(isset($_GET["page"]) && $_GET["page"] =="online_users")
     {
         require_once ("Views/admin/online_users.php");
@@ -100,6 +107,11 @@ if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] === true) {
         elseif (isset($_GET["Previous"]) && is_numeric($_GET["Previous"])){
             require_once ("Views/admin/online_users.php");
         }
+    }
+
+    else if(isset($_GET["page"]) && $_GET["page"] =="excel_file")
+    {
+        require_once ("Views/admin/exel.php");
     }
 
     else

@@ -175,7 +175,7 @@ else{
 
                 <div class="box" style="width: 300%; margin: 0 auto;">
                     <div class="box-header">
-                        <h3 class="box-title">Bordered Table</h3>
+                        <h3 class="box-title">Online Users Table</h3>
                     </div><!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">
